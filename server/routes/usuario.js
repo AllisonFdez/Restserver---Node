@@ -2,13 +2,22 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const Usuario = require('../models/usuario');
+const { verificaToken, verificaAdminRole } = require('../middlewares/autenticacion')
 const app = express();
 
 app.get('/', function(req, res) {
     res.send('Sistra')
 });
 
-app.get('/usuario', function(req, res) {
+//Estoy indicando que ese es el midddleware que se va a disparar 
+//cuando quiera acceder a esa ruta.
+app.get('/usuario', verificaToken, (req, res) => {
+
+    // return res.json({
+    //     usuario: req.usuario,
+    //     email: req.usuario.email
+    // })
+
     let desde = req.query.desde || 0;
     desde = Number(desde)
 
@@ -37,7 +46,7 @@ app.get('/usuario', function(req, res) {
         })
 });
 
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verificaToken, verificaAdminRole], (req, res) => {
     let body = req.body;
 
     let usuario = new Usuario({
@@ -78,7 +87,7 @@ app.post('/usuario', function(req, res) {
 
 });
 
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [verificaToken, verificaAdminRole], (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
 
@@ -101,7 +110,7 @@ app.put('/usuario/:id', function(req, res) {
 
 });
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaAdminRole], (req, res) => {
     let id = req.params.id;
     // De esta manera se borra un registro físicamente.
     //Usuario.findByIdAndRemove(id, body, (err, usuarioDeleted) => {

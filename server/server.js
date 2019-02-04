@@ -8,7 +8,8 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(require('./routes/usuario'));
+//Rutas
+app.use(require('./routes/index'));
 
 //mongoose.connect('mongodb://localhost:27017/coffe', (err, res) => {
 mongoose.connect(process.env.URLDB, (err, res) => {
