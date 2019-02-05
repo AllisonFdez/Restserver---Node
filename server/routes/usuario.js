@@ -5,9 +5,9 @@ const Usuario = require('../models/usuario');
 const { verificaToken, verificaAdminRole } = require('../middlewares/autenticacion')
 const app = express();
 
-app.get('/', function(req, res) {
-    res.send('Sistra')
-});
+// app.get('/', function(req, res) {
+//     res.send('Sistra')
+// });
 
 //Estoy indicando que ese es el midddleware que se va a disparar 
 //cuando quiera acceder a esa ruta.
